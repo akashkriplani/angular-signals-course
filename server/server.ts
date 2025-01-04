@@ -1,13 +1,13 @@
 
 import * as express from 'express';
-import {Application} from "express";
-import {getAllCourses, getCourseById} from "./get-courses.route";
-import {searchLessons} from "./search-lessons.route";
-import {saveCourse} from './save-course.route';
-import {loginUser} from './login.route';
-import {createCourse} from "./create-course.route";
-import {deleteCourse} from "./delete-course.route";
-import {saveLesson} from "./save-lesson.route";
+import { Application } from "express";
+import { getAllCourses, getCourseById } from "./get-courses.route";
+import { searchLessons } from "./search-lessons.route";
+import { saveCourse } from './save-course.route';
+import { loginUser } from './login.route';
+import { createCourse } from "./create-course.route";
+import { deleteCourse } from "./delete-course.route";
+import { saveLesson } from "./save-lesson.route";
 
 const bodyParser = require('body-parser');
 
@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 
 const cors = require('cors');
 
-app.use(cors({origin: true}));
+app.use(cors({ origin: true }));
 
 app.route('/api/courses').get(getAllCourses);
 
