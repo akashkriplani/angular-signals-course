@@ -33,6 +33,7 @@ export class HomeComponent {
 
   coursesService = inject(CoursesService);
   dialog = inject(MatDialog);
+  messagesService = inject(MessagesService);
 
   #courses = signal<Course[]>([]);
 
@@ -61,7 +62,7 @@ export class HomeComponent {
       const newCourses = courses.filter(({ id }) => id !== courseId);
       this.#courses.set(newCourses);
     } catch (err) {
-      alert('Error deleting course!');
+      this.messagesService.showMessage('Error deleting course!', 'error');
       console.error(err);
     }
   }
@@ -77,7 +78,7 @@ export class HomeComponent {
       const courses = await this.coursesService.loadAllCourses();
       this.#courses.set(courses.sort(sortCoursesBySeqNo));
     } catch (err) {
-      alert('Error loading courses!');
+      this.messagesService.showMessage('Error loading courses!', 'error');
       console.error(err);
     }
   }
