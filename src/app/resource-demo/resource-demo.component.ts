@@ -1,52 +1,44 @@
-import {Component, effect, inject, resource, signal} from "@angular/core";
-import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {environment} from "../../environments/environment";
-import {Lesson} from "../models/lesson.model";
-
+import { Component, effect, inject, resource, signal } from '@angular/core';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { environment } from '../../environments/environment';
+import { Lesson } from '../models/lesson.model';
 
 @Component({
   selector: 'resource-demo',
   templateUrl: './resource-demo.component.html',
   styleUrls: ['./resource-demo.component.scss'],
-  imports: [MatProgressSpinner]
+  imports: [MatProgressSpinner],
 })
 export class ResourceDemoComponent {
-
   env = environment;
 
   search = signal<string>('');
 
-  lessons = resource<Lesson[], {search:string}>({
-    params: () => ({
-      search: this.search()
-    }),
-    loader: async ({params, abortSignal}) => {
-      const response = await
-        fetch(`${this.env.apiRoot}/search-lessons?query=${params.search}&courseId=18`,
-          {
-            signal: abortSignal
-          });
+  lessons = resource<Lesson[], { search: string }>({
+    params: () => ({ search: this.search() }),
+    loader: async ({ params, abortSignal }) => {
+      const response = await fetch(
+        `${this.env.apiRoot}/search-lessons?query=${params.search}&courseId=18`,
+        { signal: abortSignal },
+      );
+
       const json = await response.json();
+
       return json.lessons;
-    }
+    },
   });
 
   constructor() {
-
     effect(() => {
-      console.log('searching lessons:', this.search() );
-    })
+      console.log('searching lessons:', this.search());
+    });
   }
 
   searchLessons(search: string) {
     this.search.set(search);
   }
 
-  reset() {
+  reset() {}
 
-  }
-
-  reload() {
-
-  }
+  reload() {}
 }
