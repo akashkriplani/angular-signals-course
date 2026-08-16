@@ -1,45 +1,52 @@
-import {Component, effect, linkedSignal, signal} from "@angular/core";
+import { Component, effect, linkedSignal, signal } from '@angular/core';
 
 @Component({
   selector: 'linked-signal-demo',
   templateUrl: './linked-signal-demo.component.html',
-  styleUrl: "./linked-signal-demo.component.scss"
+  styleUrl: './linked-signal-demo.component.scss',
 })
 export class LinkedSignalDemoComponent {
-
   courses = [
     {
-      code: "BEGINNERS",
-      title: "Angular for Beginners",
-      defaultQuantity: 10
+      code: 'BEGINNERS',
+      title: 'Angular for Beginners',
+      defaultQuantity: 10,
     },
     {
-      code: "SIGNALS",
-      title: "Angular Signals In Depth",
-      defaultQuantity: 20
+      code: 'SIGNALS',
+      title: 'Angular Signals In Depth',
+      defaultQuantity: 20,
     },
     {
-      code: "SSR",
-      title: "Angular SSR In Depth",
-      defaultQuantity: 30
-    }
+      code: 'SSR',
+      title: 'Angular SSR In Depth',
+      defaultQuantity: 30,
+    },
   ];
 
-  selectedCourse = signal<string | null>("BEGINNERS");
+  selectedCourse = signal<string | null>('BEGINNERS');
 
-  quantity = signal(1);
+  quantity = linkedSignal({
+    source: () => ({ courseCode: this.selectedCourse }),
+    computation: (source, previous) => {
+      console.log(`linkedsignal source: `, source.courseCode());
+      console.log(`linkedsignal previous: `, previous);
 
-  constructor() {
+      return (
+        this.courses.find((c) => c.code === source.courseCode())
+          ?.defaultQuantity ?? 1
+      );
+    },
+  });
 
-  }
+  constructor() {}
 
   onQuantityChanged(quantity: string) {
     this.quantity.set(parseInt(quantity));
   }
 
   onArticleAdded() {
-    alert(`${this.quantity()} licenses added for ${this.selectedCourse()}`)
-
+    alert(`${this.quantity()} licenses added for ${this.selectedCourse()}`);
   }
 
   onCourseSelected(courseCode: string) {
